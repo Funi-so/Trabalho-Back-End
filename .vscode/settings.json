@@ -51,5 +51,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Exercício Back-End.sln"
+    "dotnet.defaultSolution": "Trabalho-Back-End.sln"
 }
