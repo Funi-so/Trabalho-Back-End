@@ -20,7 +20,7 @@ public class MainHUD : MonoBehaviour
     {
         if (Input.GetKeyDown(menuKey))
         {
-            //if (!DialogController.controller.isTalking)
+            if (!DialogController.controller.isTalking)
             {
                 if (!mainEnabled) 
                 {
@@ -36,7 +36,7 @@ public class MainHUD : MonoBehaviour
                     pauseMenu.SetActive(false);
                     Time.timeScale = 1f;
                 }
-            } //else { DialogController.controller.FinishDialog(); }
+            } else { DialogController.controller.FinishDialog(); }
         }
     }
     /*
