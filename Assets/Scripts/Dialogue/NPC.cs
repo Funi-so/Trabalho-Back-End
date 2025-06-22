@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class NPC : MonoBehaviour
 {
@@ -8,6 +10,10 @@ public class NPC : MonoBehaviour
     [SerializeField]
     public NPCSO myData;
     public bool canTalk;
+
+    [Header("Events")]
+    public int2[] EventIndexes;
+    public UnityEvent[] events;
     private void Start()
     {
         DialogController.controller.myExclamation.SetActive(false);
@@ -21,7 +27,7 @@ public class NPC : MonoBehaviour
             if (!DialogController.controller.isTalking)
             {
                 DialogController.controller.myExclamation.SetActive(false);
-                DialogController.controller.StartDialog(myData);
+                DialogController.controller.StartDialog(this);
             }
             else
             {
@@ -29,6 +35,11 @@ public class NPC : MonoBehaviour
                 if (!(myData.dialog[dialogIndex].answers.Length > 0))
                     DialogController.controller.SkipDialog();
             }
+        }
+
+        if (canTalk && !DialogController.controller.isTalking)
+        {
+            DialogController.controller.myExclamation.SetActive(true);
         }
     }
     private void OnTriggerEnter2D(Collider2D other)
@@ -46,6 +57,16 @@ public class NPC : MonoBehaviour
         {
             DialogController.controller.myExclamation.SetActive(false);
             canTalk = false;
+        }
+    }
+
+    public void CheckEvent(int index)
+    {
+        foreach(int2 i in EventIndexes)
+        {
+            if (index == i.x) {  
+                events[i.y].Invoke();    
+            }
         }
     }
 }

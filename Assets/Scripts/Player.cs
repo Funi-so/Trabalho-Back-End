@@ -50,23 +50,25 @@ public class Player : MonoBehaviour
 
     void Move()
     {
-
-        rb.AddForce(vel * speed / resistence, ForceMode2D.Force);
-
-        if (vel.magnitude > 0.1) animator.SetBool("running", true);
-        else animator.SetBool("running", false);
-
-        animator.SetBool("falling", false);
-        animator.SetBool("jumping", false);
-
-        //Rotação em Y
-        if (vel.x < 0)
+        if (!DialogController.controller.isTalking)
         {
-            model.transform.localScale = new Vector3(-1, 1, 1);
-        }
-        else if (vel.x > 0)
-            model.transform.localScale = new Vector3(1, 1, 1);
+            rb.AddForce(vel * speed / resistence, ForceMode2D.Force);
 
+            if (vel.magnitude > 0.1) animator.SetBool("running", true);
+            else animator.SetBool("running", false);
+
+            animator.SetBool("falling", false);
+            animator.SetBool("jumping", false);
+
+            //Rotação em Y
+            if (vel.x < 0)
+            {
+                model.transform.localScale = new Vector3(-1, 1, 1);
+            }
+            else if (vel.x > 0)
+                model.transform.localScale = new Vector3(1, 1, 1);
+        }
+        else { rb.velocity = Vector2.zero; animator.SetBool("running", false); }
     }
 
     void SpeedControl()

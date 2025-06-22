@@ -14,7 +14,7 @@ public class DialogController : MonoBehaviour
     //[SerializeField] Image NPCSprite;
     //[SerializeField] Sprite playerSprite;
     public GameObject myExclamation;
-    public NPCSO currentNPC;
+    public NPC currentNPC;
     public bool isTalking;
     public int dialogIndex;
 
@@ -31,7 +31,7 @@ public class DialogController : MonoBehaviour
         dialogPanel.SetActive(false);
         choicesPanel.SetActive(false);
     }
-    public void StartDialog(NPCSO theNPC)
+    public void StartDialog(NPC theNPC)
     {
         currentNPC = theNPC;
         isTalking = true;
@@ -42,32 +42,33 @@ public class DialogController : MonoBehaviour
 
     public void Dialog()
     {
-        if (dialogIndex >= currentNPC.dialog.Length) FinishDialog();
+        if (dialogIndex >= currentNPC.myData.dialog.Length) FinishDialog();
         else
         {
             HideChoices();
-            dialogText.text = currentNPC.dialog[dialogIndex].message;
-            if (currentNPC.dialog[dialogIndex].speaker == Speaker.NPC)
+            dialogText.text = currentNPC.myData.dialog[dialogIndex].message;
+            currentNPC.CheckEvent(dialogIndex);
+            if (currentNPC.myData.dialog[dialogIndex].speaker == Speaker.NPC)
             {
                 choicesPanel.SetActive(false);
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
                 //NPCSprite.sprite = currentNPC.NPCSprite;
             }
-            else if (currentNPC.dialog[dialogIndex].speaker == Speaker.Player)
+            else if (currentNPC.myData.dialog[dialogIndex].speaker == Speaker.Player)
             {
                 //NPCSprite.sprite = playerSprite;
-                if (currentNPC.dialog[dialogIndex].answers.Length > 0)
+                if (currentNPC.myData.dialog[dialogIndex].answers.Length > 0)
                 {
                     choicesPanel.SetActive(true);
                     Cursor.visible = true;
                     Cursor.lockState = CursorLockMode.None;
-                    for (int i = 0; i < currentNPC.dialog[dialogIndex].answers.Length; i++)
+                    for (int i = 0; i < currentNPC.myData.dialog[dialogIndex].answers.Length; i++)
                     {
                         if (i > 2) break;
                         choicesPanel.transform.GetChild(i).gameObject.SetActive(true);
                         /*choicesPanel.transform.GetChild(i).GetChild(0).GetComponent<Text>().text*/
-                        optionTexts[i].text = currentNPC.dialog[dialogIndex].answers[i];
+                        optionTexts[i].text = currentNPC.myData.dialog[dialogIndex].answers[i];
                     }
                 }
             }
@@ -89,16 +90,16 @@ public class DialogController : MonoBehaviour
         for (int i = 1; i < 4; i++)
         {
             if (!canSkip || dialogIndex-i<=0) break;
-            if (currentNPC.dialog[dialogIndex-i].answers.Length > 0)
+            if (currentNPC.myData.dialog[dialogIndex-i].answers.Length > 0)
             {
                 canSkip = false;
                 switch (i)
                 {
                     case 1:
-                        skips = currentNPC.dialog[dialogIndex - i].answers.Length;
+                        skips = currentNPC.myData.dialog[dialogIndex - i].answers.Length;
                         break;
                     case 2:
-                        if (currentNPC.dialog[dialogIndex - i].answers.Length == 3)
+                        if (currentNPC.myData.dialog[dialogIndex - i].answers.Length == 3)
                             skips = 2;
                         else skips = 1;
                         break;
