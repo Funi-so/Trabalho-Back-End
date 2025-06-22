@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     public float maxSpeed;
 
     public float resistence = 1;
-    public Rigidbody rb;
+    public Rigidbody2D rb;
     Vector3 vel;
 
     public Animator animator;
@@ -20,55 +20,72 @@ public class Player : MonoBehaviour
 
     void Awake()
     {
-        
         inventory = new Inventory();
-        uiInventory.SetInventory(inventory);
-        rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody2D>();
     }
-
+    void Start()
+    {
+        uiInventory.SetInventory(inventory);
+    }
     void Update()
     {
         vel = GetInput();
         SpeedControl();
     }
 
-    void FixedUpdate(){
+    void FixedUpdate()
+    {
         Move();
     }
 
-    Vector3 GetInput(){
+    Vector3 GetInput()
+    {
         Vector3 dir = new Vector3();
-        dir.x = Input.GetAxisRaw("Horizontal") ;
-        dir.y = Input.GetAxisRaw("Vertical") ;
-        dir = dir.normalized; 
+        dir.x = Input.GetAxisRaw("Horizontal");
+        dir.y = Input.GetAxisRaw("Vertical");
+        dir = dir.normalized;
 
         return dir;
     }
 
-    void Move(){
+    void Move()
+    {
 
-            rb.AddForce(vel * speed / resistence, ForceMode.Force);
-            
-            if(vel.magnitude > 0.1) animator.SetBool("running", true);
-            else animator.SetBool("running", false);
-            
-            animator.SetBool("falling", false);
-            animator.SetBool("jumping", false);
+        rb.AddForce(vel * speed / resistence, ForceMode2D.Force);
+
+        if (vel.magnitude > 0.1) animator.SetBool("running", true);
+        else animator.SetBool("running", false);
+
+        animator.SetBool("falling", false);
+        animator.SetBool("jumping", false);
 
         //Rotação em Y
-        if (vel.x < 0){
+        if (vel.x < 0)
+        {
             model.transform.localScale = new Vector3(-1, 1, 1);
         }
         else if (vel.x > 0)
-        model.transform.localScale = new Vector3(1, 1, 1);
+            model.transform.localScale = new Vector3(1, 1, 1);
 
     }
 
-    void SpeedControl(){
-        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-        if (flatVel.magnitude > maxSpeed){
-            Vector3 limitedVel = flatVel.normalized * maxSpeed;
-            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+    void SpeedControl()
+    {
+        Vector3 flatVel = new Vector2(rb.velocity.x, rb.velocity.y);
+        if (flatVel.magnitude > maxSpeed)
+        {
+            Vector2 limitedVel = flatVel.normalized * maxSpeed;
+            rb.velocity = new Vector3(limitedVel.x, limitedVel.y);
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        ItemWorld itemWorld = collider.GetComponent<ItemWorld>();
+        if(itemWorld != null)
+        {
+            inventory.AddItem(itemWorld.GetItem());
+            itemWorld.DestroySelf();
         }
     }
 }
