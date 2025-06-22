@@ -24,6 +24,7 @@ public class WalletDetector : MonoBehaviour
         StartCoroutine("LoadText");
     }
 
+
     IEnumerator LoadText()
     {
         UnityWebRequest request = UnityWebRequest.Get(url);
@@ -31,7 +32,8 @@ public class WalletDetector : MonoBehaviour
         if (request.result == UnityWebRequest.Result.Success)
         {
             txtlabel.text = request.downloadHandler.text;
-            int.TryParse(txtlabel.text, out price);
+            
+            price = int.Parse(txtlabel.text);
         }
         
     }
