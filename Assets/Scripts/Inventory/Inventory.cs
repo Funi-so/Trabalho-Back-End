@@ -29,4 +29,16 @@ public class Inventory
     {
         return itemList;
     }
+
+    public int GetItemAmount(Item.ItemType type)
+    {
+        int n = 0;
+        foreach (Item i in itemList) {
+            if (i.itemType == type)
+            {
+                n = i.amount;
+            }
+        }
+        return n;
+    }
 }

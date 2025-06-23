@@ -42,11 +42,11 @@ public class UIInventory : MonoBehaviour
             {
                 RectTransform itemSlotRectTransform = Instantiate(itemSlotTemplate, itemSlotContainer).GetComponent<RectTransform>();
                 itemSlotRectTransform.gameObject.SetActive(true);
-                itemSlotRectTransform.anchoredPosition = new Vector2(x * itemSlotCellSize, y * itemSlotCellSize);
+                itemSlotRectTransform.anchoredPosition = new Vector2(x * itemSlotCellSize, y * -itemSlotCellSize);
                 Image image = itemSlotRectTransform.Find("ItemSlotImage").GetComponent<Image>();
                 image.sprite = item.GetSprite();
                 x++;
-                if (x > 4)
+                if (x > 5)
                 {
                     x = 0;
                     y++;

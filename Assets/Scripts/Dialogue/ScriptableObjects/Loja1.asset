@@ -10,22 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2d54d74cb1c6694d94f90a7ab3526a2, type: 3}
-  m_Name: Arbusto2
+  m_Name: Loja1
   m_EditorClassIdentifier: 
-  myName: Arbusto 2
+  myName: 
   dialog:
-  - speaker: 0
-    message: Outro arbusto normal.
-    answers: []
   - speaker: 1
-    message: Mas, o fato de ter apenas 2 arbustos, completamente normais, nesse campo
-      todo, te parece suspeito.
+    message: "Bem vindo \xE0 minha lojinha! Vendo de quase tudo pelo pre\xE7o certo...
+      Das coisas que eu tenho, pelo menos."
     answers:
-    - Suspeitar
-    - Ignorar
+    - Sair
+    - Comprar
   - speaker: 0
-    message: A despeito de suas suspeitas, ele continua sendo normal.
+    message: Manda ver
     answers: []
   - speaker: 0
-    message: "Ele te ignora de volta e ambos ficam invis\xEDveis."
+    message: "At\xE9!"
     answers: []

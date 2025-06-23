@@ -50,9 +50,9 @@ public class DialogController : MonoBehaviour
             currentNPC.CheckEvent(dialogIndex);
             if (currentNPC.myData.dialog[dialogIndex].speaker == Speaker.NPC)
             {
-                choicesPanel.SetActive(false);
+                choicesPanel.SetActive(false);/*
                 Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.lockState = CursorLockMode.Locked;*/
                 //NPCSprite.sprite = currentNPC.NPCSprite;
             }
             else if (currentNPC.myData.dialog[dialogIndex].speaker == Speaker.Player)
@@ -60,9 +60,9 @@ public class DialogController : MonoBehaviour
                 //NPCSprite.sprite = playerSprite;
                 if (currentNPC.myData.dialog[dialogIndex].answers.Length > 0)
                 {
-                    choicesPanel.SetActive(true);
+                    choicesPanel.SetActive(true);/*
                     Cursor.visible = true;
-                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.lockState = CursorLockMode.None;*/
                     for (int i = 0; i < currentNPC.myData.dialog[dialogIndex].answers.Length; i++)
                     {
                         if (i > 2) break;

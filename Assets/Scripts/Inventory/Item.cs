@@ -8,9 +8,10 @@ public class Item
 {
     public enum ItemType
     {
-        Sword,
-        Key,
-        Coin,
+        Banana,
+        Chapeu,
+        Arvore,
+        Moeda,
     }
 
     public ItemType itemType;
@@ -21,10 +22,17 @@ public class Item
         switch (itemType)
         {
             default:
-            case ItemType.Sword: return ItemAssets.Instance.swordSprite;
-            case ItemType.Key: return ItemAssets.Instance.keySprite;
-            case ItemType.Coin: return ItemAssets.Instance.coinSprite;
+            case ItemType.Banana: return ItemAssets.Instance.swordSprite;
+            case ItemType.Chapeu: return ItemAssets.Instance.keySprite;
+            case ItemType.Arvore: return ItemAssets.Instance.treeSprite;
+            case ItemType.Moeda: return ItemAssets.Instance.coinSprite;
 
         }
+    }
+
+    public Item(Item.ItemType type, int amount)
+    {
+        this.itemType = type;
+        this.amount = amount;
     }
 }

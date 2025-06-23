@@ -16,7 +16,8 @@ public class Player : MonoBehaviour
     public LayerMask groundMask;
     public bool grounded;
     [SerializeField] private UIInventory uiInventory;
-    private Inventory inventory;
+    public MainHUD hud;
+    public Inventory inventory;
 
     void Awake()
     {
@@ -50,7 +51,7 @@ public class Player : MonoBehaviour
 
     void Move()
     {
-        if (!DialogController.controller.isTalking)
+        if (!DialogController.controller.isTalking || hud.storeEnabled)
         {
             rb.AddForce(vel * speed / resistence, ForceMode2D.Force);
 

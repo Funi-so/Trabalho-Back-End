@@ -10,7 +10,7 @@ public class GenericButton : MonoBehaviour
 {
     [Header("Scene Transition")]
     public string SceneName;
-    
+
     [Header("Fade In / Fade Out")]
     public GameObject rendsParent;
     private Graphic[] rends;
@@ -18,22 +18,25 @@ public class GenericButton : MonoBehaviour
     public float fadeTime = 0.5f;
     public float disableTime = 1.0f;
 
-    [Header("Size Change")]    
+    [Header("Size Change")]
     RectTransform rect;
     public Text text;
 
-    void Start(){
+    void Start()
+    {
         rect = GetComponent<RectTransform>();
-        if(rendsParent != null){
+        if (rendsParent != null)
+        {
             rends = rendsParent.GetComponentsInChildren<Graphic>(true);
         }
     }
     public void GoToScene(float delayTime)
     {
         Invoke("LoadScene", delayTime);
-    } 
+    }
 
-    private void LoadScene(){
+    private void LoadScene()
+    {
         SceneManager.LoadScene(SceneName);
     }
 
@@ -42,34 +45,52 @@ public class GenericButton : MonoBehaviour
         Application.Quit();
     }
 
-    public void ChangeSize(float changeAmt){
+    public void ChangeSize(float changeAmt)
+    {
         rect.sizeDelta = rect.sizeDelta * changeAmt;
     }
 
-    public void ChangeFontSize(int size){
+    public void ChangeFontSize(int size)
+    {
         text.fontSize = size;
     }
 
-    public void EnableAndFadeIn(){
+    public void EnableAndFadeIn()
+    {
         StartCoroutine(SetObjectActive(rendsParent, true, waitTime));
         StartCoroutine(FadeAll(0.0f, 1.0f, waitTime));
     }
 
-    public void FadeOutAndDisable(){
+    public void FadeOutAndDisable()
+    {
         StartCoroutine(FadeAll(1.0f, 0.0f, waitTime));
         StartCoroutine(SetObjectActive(rendsParent, false, disableTime));
     }
 
-    IEnumerator FadeAll(float startAlpha, float targetAlpha, float delayTime){
+    IEnumerator FadeAll(float startAlpha, float targetAlpha, float delayTime)
+    {
         yield return new WaitForSeconds(delayTime);
-        for(int c = 0; c < rends.Length; c++){
-                rends[c].GetComponent<CanvasRenderer>().SetAlpha(startAlpha);
-                rends[c].CrossFadeAlpha(targetAlpha, fadeTime, true);
-            }
+        for (int c = 0; c < rends.Length; c++)
+        {
+            rends[c].GetComponent<CanvasRenderer>().SetAlpha(startAlpha);
+            rends[c].CrossFadeAlpha(targetAlpha, fadeTime, true);
+        }
     }
 
-    IEnumerator SetObjectActive(GameObject obj, bool act, float delayTime){
+    IEnumerator SetObjectActive(GameObject obj, bool act, float delayTime)
+    {
         yield return new WaitForSeconds(delayTime);
         obj.SetActive(act);
+    }
+
+    public void UnlockCursor()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+    public void LockCursor()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 }

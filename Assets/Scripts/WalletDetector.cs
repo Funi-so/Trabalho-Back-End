@@ -9,36 +9,62 @@ using TMPro;
 public class WalletDetector : MonoBehaviour
 {
     public int wallet;
-    public int price;
-    public GameObject Arvore;
-    public GameObject banana;
-    public GameObject Chapeu;
-    public TMP_Text txtlabel;
+    private int price;
+    public GameObject player;
+    private Inventory inventory;
+    private Item arvore = new Item(Item.ItemType.Arvore, 1);
+    private Item banana = new Item(Item.ItemType.Banana, 1);
+    private Item chapeu = new Item(Item.ItemType.Chapeu, 1);
+    public Text txtlabel;
     [SerializeField] private String url;
+    private String arquivo;
 
 
-
-    public void ComprarArvore()
+    public void Comprar(string item)
     {
-        StartCoroutine("BuyArvore");
+        inventory = player.GetComponent<Player>().inventory;
+        wallet = inventory.GetItemAmount(Item.ItemType.Moeda);
+        arquivo = item;
+        StartCoroutine("Buy" + item);
+
+        Debug.Log("Tentativa de Compra");
     }
 
-    public void Comprarbanana()
+    IEnumerator BuyBanana()
     {
-        StartCoroutine("Buybanana");
-    }
-
-    public void ComprarChapeu()
-    {
+        UnityWebRequest request = UnityWebRequest.Get(url+arquivo+".txt");
+        yield return request.SendWebRequest();
+        if (request.result == UnityWebRequest.Result.Success)
         {
-            StartCoroutine("BuyHat");
-        }
+            Debug.Log("Requisitado com sucesso");
+            txtlabel.text = request.downloadHandler.text;
 
-       
+            price = int.Parse(txtlabel.text);
+            if (wallet >= price)
+            {
+
+                Item moeda = new Item(Item.ItemType.Moeda, wallet);
+                inventory.RemoveItem(moeda);
+                moeda = new Item(Item.ItemType.Moeda, wallet - price);
+                inventory.AddItem(moeda);
+
+                inventory.AddItem(banana);
+                txtlabel.text = "vocï¿½ comprou a banana";
+                Debug.Log("Banana comprada");
+            }
+            else
+            {
+                txtlabel.text = "vocï¿½ n tem dinheiro para comprar isso";
+                Debug.Log("Sem dinheiro pra banana");
+            }
+        }
+        else
+            Debug.Log("Requisitado sem sucesso");
+
     }
-    IEnumerator Buybanana()
+    IEnumerator BuyChapeu()
     {
-        UnityWebRequest request = UnityWebRequest.Get(url);
+        UnityWebRequest request = UnityWebRequest.Get(url+arquivo+".txt");
         yield return request.SendWebRequest();
         if (request.result == UnityWebRequest.Result.Success)
         {
@@ -47,30 +73,14 @@ public class WalletDetector : MonoBehaviour
             price = int.Parse(txtlabel.text);
             if (wallet >= price)
             {
-                wallet = -price;
-                banana.SetActive(true);
-                txtlabel.text = "você comprou a banana";
-            }
-            txtlabel.text = "você n tem dinheiro para comprar isso";
-        }
-
-    }
-    IEnumerator BuyHat()
-    {
-        UnityWebRequest request = UnityWebRequest.Get(url);
-        yield return request.SendWebRequest();
-        if (request.result == UnityWebRequest.Result.Success)
-        {
-            txtlabel.text = request.downloadHandler.text;
-
-            price = int.Parse(txtlabel.text);
-            if (wallet >= price)
-            {
-                wallet = -price;
-                Chapeu.SetActive(true);
-                txtlabel.text = "você comprou o chapeu";
-            }
-            txtlabel.text = "você n tem dinheiro para comprar isso";
+                Item moeda = new Item(Item.ItemType.Moeda, wallet);
+                inventory.RemoveItem(moeda);
+                moeda = new Item(Item.ItemType.Moeda, wallet - price);
+                inventory.AddItem(moeda);
+                inventory.AddItem(chapeu);
+                txtlabel.text = "vocï¿½ comprou o chapeu";
+            }else
+            txtlabel.text = "vocï¿½ n tem dinheiro para comprar isso";
         }
 
 
@@ -78,21 +88,33 @@ public class WalletDetector : MonoBehaviour
     }
     IEnumerator BuyArvore()
     {
-        UnityWebRequest request = UnityWebRequest.Get(url);
+        UnityWebRequest request = UnityWebRequest.Get(url + arquivo + ".txt");
         yield return request.SendWebRequest();
         if (request.result == UnityWebRequest.Result.Success)
         {
+            Debug.Log("Requisitado com sucesso");
             txtlabel.text = request.downloadHandler.text;
 
             price = int.Parse(txtlabel.text);
             if (wallet >= price)
             {
-                wallet = -price;
-                Arvore.SetActive(true);
-                txtlabel.text = "você comprou a arvore";
+                Item moeda = new Item(Item.ItemType.Moeda, wallet);
+                inventory.RemoveItem(moeda);
+                moeda = new Item(Item.ItemType.Moeda, wallet - price);
+                inventory.AddItem(moeda);
+                
+                inventory.AddItem(arvore);
+                txtlabel.text = "vocï¿½ comprou a arvore";
+                Debug.Log("Arvore comprada");
             }
-            txtlabel.text = "você n tem dinheiro para comprar isso";
+            else
+            {
+                txtlabel.text = "vocï¿½ n tem dinheiro para comprar isso";
+                Debug.Log("Arvore nao comprada (sem dimdim)");
+            }
         }
+        else
+            Debug.Log("Requisitado sem sucesso");
 
     }
 }

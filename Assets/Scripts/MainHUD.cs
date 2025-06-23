@@ -4,9 +4,11 @@ using UnityEngine.UI;
 public class MainHUD : MonoBehaviour
 {
     public GameObject pauseMenu;
+    public GameObject[] storeMenu;
     public GenericButton FadeIn;
     public KeyCode menuKey;
     bool mainEnabled = false;
+    public bool storeEnabled = false;
 
     void Start()
     {
@@ -22,7 +24,7 @@ public class MainHUD : MonoBehaviour
         {
             if (!DialogController.controller.isTalking)
             {
-                if (!mainEnabled) 
+                if (!mainEnabled)
                 {
                     mainEnabled = true;
                     pauseMenu.SetActive(true);
@@ -36,8 +38,27 @@ public class MainHUD : MonoBehaviour
                     pauseMenu.SetActive(false);
                     Time.timeScale = 1f;
                 }
-            } else { DialogController.controller.FinishDialog(); }
+            }
+            else { DialogController.controller.FinishDialog(); }
         }
+
+        if (storeEnabled)
+        {
+            if (Input.GetKeyDown(menuKey))
+            {
+                storeEnabled = false;
+                foreach (GameObject go in storeMenu)
+                {
+                    go.SetActive(false);
+                }
+            }
+
+        }
+    }
+
+    public void EnableDisableStore(bool enabled)
+    {
+        storeEnabled = enabled;
     }
     /*
     public void AddIndexCount(int value)
